@@ -26,4 +26,14 @@
 //     HttpResponse::Ok().body("Hey there!")
 // }
 
-fn main() {}
+use github_webhook::event::{self, Event};
+use serde_json;
+use std::fs;
+fn main() {
+    let event = std::env::args().nth(1).unwrap();
+    let filename = format!("data/{}.json", event);
+    let content = fs::read_to_string(filename).unwrap();
+    let patched = event::patch_payload_json(&event, &content);
+    let data = serde_json::from_str::<Event>(&patched);
+    println!("{:#?}", data);
+}

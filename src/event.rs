@@ -23,6 +23,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ************************************************************************
 
+use case::CaseExt;
+pub fn patch_payload_json(event: &str, payload: &str) -> String {
+    let mut patched_payload = "{\"".to_string();
+    patched_payload.push_str(event.to_camel().as_ref());
+    patched_payload.push_str("\":");
+    patched_payload.push_str(payload);
+    patched_payload.push_str("}");
+    patched_payload
+}
+
 use serde::Deserialize;
 #[derive(Debug, Deserialize, Default)]
 pub struct Value {
@@ -144,7 +154,7 @@ pub enum Event {
         created: bool,
         deleted: bool,
         forced: bool,
-        head_commit: CommitStats,
+        head_commit: Option<CommitStats>,
         pusher: UserRef, // note there aren't may fields here
         #[serde(rename = "ref")]
         _ref: String,
@@ -311,7 +321,8 @@ pub struct Hook {
 
 #[derive(Default, Debug, Deserialize)]
 pub struct Issue {
-    pub assignee: Option<String>,
+    pub assignee: Option<Assignee>,
+    pub assignees: Vec<Assignee>,
     pub body: Option<String>,
     pub closed_at: Option<String>,
     pub comments: u64,
@@ -323,7 +334,7 @@ pub struct Issue {
     pub labels: Vec<Label>,
     pub labels_url: String,
     pub locked: bool,
-    pub milestone: Option<String>,
+    pub milestone: Option<MileStone>,
     pub number: u64,
     pub state: String,
     pub title: String,
@@ -370,7 +381,7 @@ pub struct Pages {
 #[derive(Default, Debug, Deserialize)]
 pub struct PullRequestDetails {
     pub _links: PullRequestLinks,
-    pub assignee: Option<String>,
+    pub assignee: Option<Assignee>,
     pub base: PullSource,
     pub body: Option<String>,
     pub closed_at: Option<String>,
@@ -411,7 +422,7 @@ pub struct PullRequestDetails {
 #[derive(Default, Debug, Deserialize)]
 pub struct PullRequest {
     pub _links: PullRequestLinks,
-    pub assignee: Option<String>,
+    pub assignee: Option<Assignee>,
     pub base: PullSource,
     pub body: Option<String>,
     pub closed_at: Option<String>,
@@ -502,7 +513,7 @@ pub struct PushRepository {
     pub contributors_url: String,
     pub created_at: u64,
     pub default_branch: String,
-    pub description: String,
+    pub description: Option<String>,
     pub downloads_url: String,
     pub events_url: String,
     pub fork: bool,
@@ -572,7 +583,7 @@ pub struct Repository {
     pub contributors_url: String,
     pub created_at: String,
     pub default_branch: String,
-    pub description: String,
+    pub description: Option<String>,
     pub downloads_url: String,
     pub events_url: String,
     pub forks: u64,
@@ -755,4 +766,72 @@ pub struct Link {
 pub struct GitRef {
     pub sha: String,
     pub url: String,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct MileStone {
+    pub url: String,
+    pub html_url: String,
+    pub labels_url: String,
+    pub id: i64,
+    pub node_id: String,
+    pub number: i64,
+    pub state: String,
+    pub title: String,
+    pub description: String,
+    pub creator: User,
+    pub open_issues: i64,
+    pub closed_issues: i64,
+    pub created_at: String,
+    pub updated_at: String,
+    pub closed_at: String,
+    pub due_on: String,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Assignee {
+    login: String,
+    id: i64,
+    node_id: String,
+    avatar_url: String,
+    gravatar_id: String,
+    url: String,
+    html_url: String,
+    followers_url: String,
+    following_url: String,
+    gists_url: String,
+    starred_url: String,
+    subscriptions_url: String,
+    organizations_url: String,
+    repos_url: String,
+    events_url: String,
+    received_events_url: String,
+    #[serde(rename = "type")]
+    _type: String,
+    site_admin: bool,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    #[test]
+    fn test_event_deserialize() {
+        let events = ["commit_comment", "issues", "issue_comment"];
+
+        for event in events.iter() {
+            let filename = format!("data/{}.json", event);
+            let content = fs::read_to_string(&filename).unwrap();
+            let patched = patch_payload_json(event, &content);
+            match serde_json::from_str::<Event>(&patched) {
+                Ok(_) => (),
+                Err(e) => {
+                    println!("filename: {}", filename);
+                    println!("{}", e);
+                    panic!()
+                }
+            }
+        }
+    }
 }
