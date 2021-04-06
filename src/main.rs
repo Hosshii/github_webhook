@@ -26,7 +26,4 @@
 //     HttpResponse::Ok().body("Hey there!")
 // }
 
-use github_webhook::event::Base;
-use serde_json::Result;
-
 fn main() {}
