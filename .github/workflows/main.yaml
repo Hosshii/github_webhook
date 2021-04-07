@@ -31,14 +31,5 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: build
-        run: cargo build --release
-
       - name: test
         run: cargo test --release
-
-      - name: artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: github_webhook
-          path: ./target/release/github_webhook
