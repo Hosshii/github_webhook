@@ -138,6 +138,13 @@ pub enum Event {
         repository: Repository,
         sender: User,
     },
+    PullRequestReview {
+        action: String,
+        pull_request: PullRequest,
+        repository: Repository,
+        review: Review,
+        sender: User,
+    },
     PullRequestReviewComment {
         action: String,
         comment: PullRequestReviewComment,
@@ -394,7 +401,7 @@ pub struct PullRequestDetails {
     pub id: u64,
     pub issue_url: String,
     pub locked: bool,
-    pub merge_commit_sha: String,
+    pub merge_commit_sha: Option<String>,
     pub merged_at: Option<String>,
     pub milestone: Option<String>,
     pub number: u64,
@@ -408,9 +415,9 @@ pub struct PullRequestDetails {
     pub url: String,
     pub user: User,
     pub merged: bool,
-    //mergeable": null,
-    mergeable_state: String,
-    //"merged_by": null,
+    pub mergeable: Option<bool>,
+    pub mergeable_state: String,
+    pub merged_by: Option<MergedBy>,
     pub comments: u64,
     pub review_comments: u64,
     pub commits: u64,
@@ -448,6 +455,25 @@ pub struct PullRequest {
     pub updated_at: String,
     pub url: String,
     pub user: User,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct Review {
+    pub id: i64,
+    pub node_id: String,
+    pub user: User,
+    pub body: Option<String>,
+    pub submitted_at: String,
+    pub state: String,
+    pub html_url: String,
+    pub pull_request_url: String,
+    pub _links: PullRequestReviewLinks,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct PullRequestReviewLinks {
+    pub html: Link,
+    pub pull_request: Link,
 }
 
 #[derive(Default, Debug, Deserialize)]
@@ -811,6 +837,29 @@ pub struct Assignee {
     site_admin: bool,
 }
 
+#[derive(Default, Debug, Deserialize)]
+pub struct MergedBy {
+    login: String,
+    id: i64,
+    node_id: String,
+    avatar_url: String,
+    gravatar_id: String,
+    url: String,
+    html_url: String,
+    followers_url: String,
+    following_url: String,
+    gists_url: String,
+    starred_url: String,
+    subscriptions_url: String,
+    organizations_url: String,
+    repos_url: String,
+    events_url: String,
+    received_events_url: String,
+    #[serde(rename = "type")]
+    _type: String,
+    site_admin: bool,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -818,7 +867,14 @@ mod tests {
 
     #[test]
     fn test_event_deserialize() {
-        let events = ["commit_comment", "issues", "issue_comment"];
+        let events = [
+            "commit_comment",
+            "issues",
+            "issue_comment",
+            "push",
+            "pull_request",
+            "pull_request_review",
+        ];
 
         for event in events.iter() {
             let filename = format!("data/{}.json", event);
