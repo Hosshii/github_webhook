@@ -42,7 +42,7 @@ pub struct Value {
 #[derive(Debug, Deserialize)]
 pub enum Event {
     CommitComment {
-        action: String,
+        action: CommitCommentAction,
         comment: Comment,
         repository: Repository,
         sender: User,
@@ -88,14 +88,14 @@ pub enum Event {
         sender: User,
     },
     IssueComment {
-        action: String,
+        action: IssueCommentAction,
         comment: IssueCommentComment,
         issue: Issue,
         repository: Repository,
         sender: User,
     },
     Issues {
-        action: String,
+        action: IssuesAction,
         issue: Issue,
         repository: Repository,
         sender: User,
@@ -132,21 +132,21 @@ pub enum Event {
         sender: User,
     },
     PullRequest {
-        action: String,
+        action: PullRequestAction,
         number: u64,
         pull_request: PullRequestDetails,
         repository: Repository,
         sender: User,
     },
     PullRequestReview {
-        action: String,
+        action: PullRequestReviewAction,
         pull_request: PullRequest,
         repository: Repository,
         review: Review,
         sender: User,
     },
     PullRequestReviewComment {
-        action: String,
+        action: PullRequestReviewCommentAction,
         comment: PullRequestReviewComment,
         pull_request: PullRequest,
         repository: Repository,
@@ -858,6 +858,78 @@ pub struct MergedBy {
     #[serde(rename = "type")]
     _type: String,
     site_admin: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CommitCommentAction {
+    Created,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum IssueCommentAction {
+    Created,
+    Edited,
+    Deleted,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum IssuesAction {
+    Opened,
+    Edited,
+    Deleted,
+    Pinned,
+    Unpinned,
+    Closed,
+    Reopened,
+    Assigned,
+    Unassigned,
+    Labeled,
+    Locked,
+    Unlocked,
+    Transferred,
+    Milestoned,
+    Demilestoned,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PullRequestReviewCommentAction {
+    Created,
+    Edited,
+    Deleted,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PullRequestReviewAction {
+    Submitted,
+    Edited,
+    Dismissed,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PullRequestAction {
+    Opened,
+    Edited,
+    Closed,
+    Assigned,
+    Unassigned,
+    ReviewRequested,
+    ReviewRequestRemoved,
+    ReadyForReview,
+    ConvertToDraft,
+    Labeled,
+    Unlabeled,
+    Synchronize,
+    AutoMergeEnabled,
+    AutoMergeDisabled,
+    Locked,
+    Unlocked,
+    Reopened,
 }
 
 #[cfg(test)]
