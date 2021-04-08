@@ -41,215 +41,215 @@ pub struct Value {
 
 #[derive(Debug, Deserialize)]
 pub struct CommitCommentEvent {
-    action: CommitCommentAction,
-    comment: Comment,
-    repository: Repository,
-    sender: User,
+    pub action: CommitCommentAction,
+    pub comment: Comment,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct CreateEvent {
-    description: String,
-    master_branch: String,
-    pusher_type: String,
+    pub description: String,
+    pub master_branch: String,
+    pub pusher_type: String,
     #[serde(rename = "ref")]
-    _ref: String,
+    pub _ref: String,
     #[serde(rename = "ref_type")]
-    ref_type: String,
-    repository: Repository,
-    sender: User,
+    pub ref_type: String,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DeleteEvent {
-    pusher_type: String,
+    pub pusher_type: String,
     #[serde(rename = "ref")]
-    _ref: String,
-    ref_type: String,
-    repository: Repository,
-    sender: User,
+    pub _ref: String,
+    pub ref_type: String,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DeploymentEvent {
-    deployment: Deployment,
-    repository: Repository,
-    sender: User,
+    pub deployment: Deployment,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DeploymentStatusEvent {
-    deployment: Deployment,
-    deployment_status: DeploymentStatus,
-    repository: Repository,
-    sender: User,
+    pub deployment: Deployment,
+    pub deployment_status: DeploymentStatus,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ForkEvent {
-    forkee: Repository,
-    repository: Repository,
-    sender: User,
+    pub forkee: Repository,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct GollumEvent {
-    pages: Vec<Pages>,
-    repository: Repository,
-    sender: User,
+    pub pages: Vec<Pages>,
+    pub repository: Repository,
+    pub sender: User,
 }
 #[derive(Debug, Deserialize)]
 pub struct IssueCommentEvent {
-    action: IssueCommentAction,
-    comment: IssueCommentComment,
-    issue: Issue,
-    repository: Repository,
-    sender: User,
+    pub action: IssueCommentAction,
+    pub comment: IssueCommentComment,
+    pub issue: Issue,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct IssuesEvent {
-    action: IssuesAction,
-    issue: Issue,
-    repository: Repository,
-    sender: User,
+    pub action: IssuesAction,
+    pub issue: Issue,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MemberEvent {
-    action: String,
-    member: User,
-    repository: Repository,
-    sender: User,
+    pub action: String,
+    pub member: User,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MembershipEvent {
-    action: String,
-    member: User,
-    organization: Organization,
-    scope: String,
-    sender: User,
-    team: Team,
+    pub action: String,
+    pub member: User,
+    pub organization: Organization,
+    pub scope: String,
+    pub sender: User,
+    pub team: Team,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PageBuildEvent {
-    build: PageBuild,
-    id: u64,
-    repository: Repository,
-    sender: User,
+    pub build: PageBuild,
+    pub id: u64,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PingEvent {
-    hook: Hook,
-    hook_id: u64,
-    repository: Repository,
-    sender: User,
-    zen: String,
+    pub hook: Hook,
+    pub hook_id: u64,
+    pub repository: Repository,
+    pub sender: User,
+    pub zen: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PublicEvent {
-    hook: Hook,
-    hook_id: u64,
-    repository: Repository,
-    sender: User,
-    zen: String,
+    pub hook: Hook,
+    pub hook_id: u64,
+    pub repository: Repository,
+    pub sender: User,
+    pub zen: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PullRequestEvent {
-    action: PullRequestAction,
-    number: u64,
-    pull_request: PullRequestDetails,
-    repository: Repository,
-    sender: User,
+    pub action: PullRequestAction,
+    pub number: u64,
+    pub pull_request: PullRequestDetails,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PullRequestReviewEvent {
-    action: PullRequestReviewAction,
-    pull_request: PullRequest,
-    repository: Repository,
-    review: Review,
-    sender: User,
+    pub action: PullRequestReviewAction,
+    pub pull_request: PullRequest,
+    pub repository: Repository,
+    pub review: Review,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PullRequestReviewCommentEvent {
-    action: PullRequestReviewCommentAction,
-    comment: PullRequestReviewComment,
-    pull_request: PullRequest,
-    repository: Repository,
-    sender: User,
+    pub action: PullRequestReviewCommentAction,
+    pub comment: PullRequestReviewComment,
+    pub pull_request: PullRequest,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PushEvent {
-    after: String,
-    base_ref: Option<String>,
-    before: String,
-    commits: Vec<CommitStats>,
-    compare: String,
-    created: bool,
-    deleted: bool,
-    forced: bool,
-    head_commit: Option<CommitStats>,
-    pusher: UserRef, // note there aren't may fields here
+    pub after: String,
+    pub base_ref: Option<String>,
+    pub before: String,
+    pub commits: Vec<CommitStats>,
+    pub compare: String,
+    pub created: bool,
+    pub deleted: bool,
+    pub forced: bool,
+    pub head_commit: Option<CommitStats>,
+    pub pusher: UserRef, // note there aren't may fields here
     #[serde(rename = "ref")]
-    _ref: String,
-    repository: PushRepository,
-    sender: User,
+    pub _ref: String,
+    pub repository: PushRepository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ReleaseEvent {
-    action: String,
-    release: Release,
-    repository: Repository,
-    sender: User,
+    pub action: String,
+    pub release: Release,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct RepositoryEvent {
-    action: String,
-    organization: Organization,
-    repository: Repository,
-    sender: User,
+    pub action: String,
+    pub organization: Organization,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct StatusEvent {
     //branches: Vec<BranchRef>,
-    commit: CommitRef,
-    context: String,
-    created_at: String,
-    description: Option<String>,
-    id: u64,
-    name: String,
-    repository: Repository,
-    sender: User,
-    sha: String,
-    state: String,
-    target_url: Option<String>,
-    updated_at: String,
+    pub commit: CommitRef,
+    pub context: String,
+    pub created_at: String,
+    pub description: Option<String>,
+    pub id: u64,
+    pub name: String,
+    pub repository: Repository,
+    pub sender: User,
+    pub sha: String,
+    pub state: String,
+    pub target_url: Option<String>,
+    pub updated_at: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct TeamAddEvent {
-    organization: Organization,
-    repository: Repository,
-    sender: User,
-    team: Team,
+    pub organization: Organization,
+    pub repository: Repository,
+    pub sender: User,
+    pub team: Team,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct WatchEvent {
-    action: String,
-    repository: Repository,
-    sender: User,
+    pub action: String,
+    pub repository: Repository,
+    pub sender: User,
 }
 
 #[derive(Debug, Deserialize)]
