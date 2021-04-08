@@ -40,172 +40,243 @@ pub struct Value {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct CommitCommentEvent {
+    action: CommitCommentAction,
+    comment: Comment,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CreateEvent {
+    description: String,
+    master_branch: String,
+    pusher_type: String,
+    #[serde(rename = "ref")]
+    _ref: String,
+    #[serde(rename = "ref_type")]
+    ref_type: String,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeleteEvent {
+    pusher_type: String,
+    #[serde(rename = "ref")]
+    _ref: String,
+    ref_type: String,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeploymentEvent {
+    deployment: Deployment,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeploymentStatusEvent {
+    deployment: Deployment,
+    deployment_status: DeploymentStatus,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ForkEvent {
+    forkee: Repository,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct GollumEvent {
+    pages: Vec<Pages>,
+    repository: Repository,
+    sender: User,
+}
+#[derive(Debug, Deserialize)]
+pub struct IssueCommentEvent {
+    action: IssueCommentAction,
+    comment: IssueCommentComment,
+    issue: Issue,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct IssuesEvent {
+    action: IssuesAction,
+    issue: Issue,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MemberEvent {
+    action: String,
+    member: User,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MembershipEvent {
+    action: String,
+    member: User,
+    organization: Organization,
+    scope: String,
+    sender: User,
+    team: Team,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PageBuildEvent {
+    build: PageBuild,
+    id: u64,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PingEvent {
+    hook: Hook,
+    hook_id: u64,
+    repository: Repository,
+    sender: User,
+    zen: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PublicEvent {
+    hook: Hook,
+    hook_id: u64,
+    repository: Repository,
+    sender: User,
+    zen: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PullRequestEvent {
+    action: PullRequestAction,
+    number: u64,
+    pull_request: PullRequestDetails,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PullRequestReviewEvent {
+    action: PullRequestReviewAction,
+    pull_request: PullRequest,
+    repository: Repository,
+    review: Review,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PullRequestReviewCommentEvent {
+    action: PullRequestReviewCommentAction,
+    comment: PullRequestReviewComment,
+    pull_request: PullRequest,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PushEvent {
+    after: String,
+    base_ref: Option<String>,
+    before: String,
+    commits: Vec<CommitStats>,
+    compare: String,
+    created: bool,
+    deleted: bool,
+    forced: bool,
+    head_commit: Option<CommitStats>,
+    pusher: UserRef, // note there aren't may fields here
+    #[serde(rename = "ref")]
+    _ref: String,
+    repository: PushRepository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ReleaseEvent {
+    action: String,
+    release: Release,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RepositoryEvent {
+    action: String,
+    organization: Organization,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct StatusEvent {
+    //branches: Vec<BranchRef>,
+    commit: CommitRef,
+    context: String,
+    created_at: String,
+    description: Option<String>,
+    id: u64,
+    name: String,
+    repository: Repository,
+    sender: User,
+    sha: String,
+    state: String,
+    target_url: Option<String>,
+    updated_at: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct TeamAddEvent {
+    organization: Organization,
+    repository: Repository,
+    sender: User,
+    team: Team,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WatchEvent {
+    action: String,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Deserialize)]
 pub enum Event {
-    CommitComment {
-        action: CommitCommentAction,
-        comment: Comment,
-        repository: Repository,
-        sender: User,
-    },
-    Create {
-        description: String,
-        master_branch: String,
-        pusher_type: String,
-        #[serde(rename = "ref")]
-        _ref: String,
-        #[serde(rename = "ref_type")]
-        ref_type: String,
-        repository: Repository,
-        sender: User,
-    },
-    Delete {
-        pusher_type: String,
-        #[serde(rename = "ref")]
-        _ref: String,
-        ref_type: String,
-        repository: Repository,
-        sender: User,
-    },
-    Deployment {
-        deployment: Deployment,
-        repository: Repository,
-        sender: User,
-    },
-    DeploymentStatus {
-        deployment: Deployment,
-        deployment_status: DeploymentStatus,
-        repository: Repository,
-        sender: User,
-    },
-    Fork {
-        forkee: Repository,
-        repository: Repository,
-        sender: User,
-    },
-    Gollum {
-        pages: Vec<Pages>,
-        repository: Repository,
-        sender: User,
-    },
-    IssueComment {
-        action: IssueCommentAction,
-        comment: IssueCommentComment,
-        issue: Issue,
-        repository: Repository,
-        sender: User,
-    },
-    Issues {
-        action: IssuesAction,
-        issue: Issue,
-        repository: Repository,
-        sender: User,
-    },
-    Member {
-        action: String,
-        member: User,
-        repository: Repository,
-        sender: User,
-    },
-    Membership {
-        action: String,
-        member: User,
-        organization: Organization,
-        scope: String,
-        sender: User,
-        team: Team,
-    },
-    PageBuild {
-        build: PageBuild,
-        id: u64,
-        repository: Repository,
-        sender: User,
-    },
-    Ping {
-        hook: Hook,
-        hook_id: u64,
-        repository: Repository,
-        sender: User,
-        zen: String,
-    },
-    Public {
-        repository: Repository,
-        sender: User,
-    },
-    PullRequest {
-        action: PullRequestAction,
-        number: u64,
-        pull_request: PullRequestDetails,
-        repository: Repository,
-        sender: User,
-    },
-    PullRequestReview {
-        action: PullRequestReviewAction,
-        pull_request: PullRequest,
-        repository: Repository,
-        review: Review,
-        sender: User,
-    },
-    PullRequestReviewComment {
-        action: PullRequestReviewCommentAction,
-        comment: PullRequestReviewComment,
-        pull_request: PullRequest,
-        repository: Repository,
-        sender: User,
-    },
-    Push {
-        after: String,
-        base_ref: Option<String>,
-        before: String,
-        commits: Vec<CommitStats>,
-        compare: String,
-        created: bool,
-        deleted: bool,
-        forced: bool,
-        head_commit: Option<CommitStats>,
-        pusher: UserRef, // note there aren't may fields here
-        #[serde(rename = "ref")]
-        _ref: String,
-        repository: PushRepository,
-        sender: User,
-    },
-    Release {
-        action: String,
-        release: Release,
-        repository: Repository,
-        sender: User,
-    },
-    Repository {
-        action: String,
-        organization: Organization,
-        repository: Repository,
-        sender: User,
-    },
-    Status {
-        //branches: Vec<BranchRef>,
-        commit: CommitRef,
-        context: String,
-        created_at: String,
-        description: Option<String>,
-        id: u64,
-        name: String,
-        repository: Repository,
-        sender: User,
-        sha: String,
-        state: String,
-        target_url: Option<String>,
-        updated_at: String,
-    },
-    TeamAdd {
-        organization: Organization,
-        repository: Repository,
-        sender: User,
-        team: Team,
-    },
-    Watch {
-        action: String,
-        repository: Repository,
-        sender: User,
-    },
+    CommitComment(CommitCommentEvent),
+    Create(CreateEvent),
+    Delete(DeleteEvent),
+    Deployment(DeploymentEvent),
+    DeploymentStatus(DeploymentStatusEvent),
+    Fork(ForkEvent),
+    Gollum(GollumEvent),
+    IssueComment(IssueCommentEvent),
+    Issues(IssuesEvent),
+    Member(MemberEvent),
+    Membership(MembershipEvent),
+    PageBuild(PageBuildEvent),
+    Ping(PingEvent),
+    Public(PublicEvent),
+    PullRequest(PullRequestEvent),
+    PullRequestReview(PullRequestReviewEvent),
+    PullRequestReviewComment(PullRequestReviewCommentEvent),
+    Push(PushEvent),
+    Release(ReleaseEvent),
+    Repository(RepositoryEvent),
+    Status(StatusEvent),
+    TeamAdd(TeamAddEvent),
+    Watch(WatchEvent),
 }
 
 #[derive(Default, Debug, Deserialize)]
