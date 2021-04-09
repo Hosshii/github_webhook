@@ -392,6 +392,7 @@ pub struct Hook {
     pub name: String,
     pub ping_url: String,
     pub test_url: String,
+    #[serde(rename = "type")]
     pub _type: String,
     pub updated_at: String,
     pub url: String,
@@ -758,7 +759,7 @@ pub struct GitUser {
 pub struct Config {
     pub content_type: String,
     pub insecure_ssl: String,
-    pub secret: String,
+    pub secret: Option<String>,
     pub url: String,
 }
 
@@ -1018,6 +1019,7 @@ mod tests {
             "pull_request",
             "pull_request_review",
             "pull_request_review_comment",
+            "ping",
         ];
 
         for event in events.iter() {
